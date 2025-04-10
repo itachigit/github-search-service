@@ -142,42 +142,5 @@ protoc --go_out=. --go-grpc_out=. github_search.proto
 
 Add unit tests for your code and run them using:
 ```bash
-go test ./...
+ginkgo ./...
 ```
-
----
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
----
-
-## Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository.
-2. Create a new branch for your feature or bug fix.
-3. Commit your changes and push them to your fork.
-4. Submit a pull request.
-
----
-
-## Acknowledgments
-
-- [GitHub API](https://docs.github.com/en/rest)
-- [gRPC](https://grpc.io/)
-- [Protocol Buffers](https://developers.google.com/protocol-buffers)
-```
-
-### Key Improvements:
-1. **Detailed Features**: Clearly outlines what the service does.
-2. **Installation and Usage**: Step-by-step instructions for setup and running the service.
-3. **Environment Variables**: Explains the required GitHub token.
-4. **API Definition**: Provides a clear description of the gRPC service and its methods.
-5. **Development Section**: Includes instructions for generating protobuf code and running tests.
-6. **Contributing**: Encourages collaboration with clear steps.
-7. **Acknowledgments**: Credits the tools and APIs used in the project.
-
-This README.md should provide a comprehensive overview of your project and make it easy for others to understand and contribute.

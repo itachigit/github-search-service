@@ -26,7 +26,12 @@ func (s *server) Search(ctx context.Context, req *pb.SearchRequest) (*pb.SearchR
 		query += fmt.Sprintf(" user:%s", req.User)
 	}
 
-	url := fmt.Sprintf("https://api.github.com/search/code?q=%s", url.QueryEscape(query))
+	apiURL := os.Getenv("GITHUB_API_URL")
+	if apiURL == "" {
+		apiURL = "https://api.github.com"
+	}
+
+	url := fmt.Sprintf("%s/search/code?q=%s", apiURL, url.QueryEscape(query))
 
 	reqHttp, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -51,8 +56,13 @@ func (s *server) Search(ctx context.Context, req *pb.SearchRequest) (*pb.SearchR
 			return nil, fmt.Errorf("error while decoding error response from github: %v", err.Error())
 		}
 
-		return nil, fmt.Errorf("error while requesting search term in github: %v, details: %v, refer: %v",
-			errorResp.Message, errorResp.Errors[0].Message, errorResp.DocumentationURL)
+		if len(errorResp.Errors) > 0 {
+			return nil, fmt.Errorf("error while requesting search term in github: %v, details: %v, refer: %v",
+				errorResp.Message, errorResp.Errors[0].Message, errorResp.DocumentationURL)
+		} else {
+			return nil, fmt.Errorf("error while requesting search term in github: %v, refer: %v",
+				errorResp.Message, errorResp.DocumentationURL)
+		}
 	}
 
 	var ghResp github.CodeSearchResult

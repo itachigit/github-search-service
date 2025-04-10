@@ -4,28 +4,21 @@ PROTO_FILE=$(PROTO_DIR)/github_search.proto
 PROTO_OUT=.
 SWAGGER_OUT=swagger
 GITHUB_TOKEN_ENV=GITHUB_TOKEN=${GITHUB_TOKEN}
-SERVER_BINARY=server
-CLIENT_BINARY=client
+GITHUB_API_URL_ENV=GITHUB_API_URL=${GITHUB_API_URL}
 
 # Default target
 .PHONY: all
 all: build
 
-# Build the server and client binaries
-.PHONY: build
-build:
-	go build -o $(SERVER_BINARY) server.go
-	go build -o $(CLIENT_BINARY) client/client.go
-
 # Run the server
 .PHONY: run-server
 run-server:
-	$(GITHUB_TOKEN_ENV) ./$(SERVER_BINARY)
+	$(GITHUB_TOKEN_ENV) ${GITHUB_API_URL} go run server.go
 
 # Run the client
 .PHONY: run-client
 run-client:
-	./client/$(CLIENT_BINARY)
+	go run ./client/client.go
 
 # Generate protobuf files
 .PHONY: proto
@@ -57,7 +50,5 @@ deps:
 	go mod tidy
 	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
-	go get github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger
 	go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger
-	go get github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway
 	go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway
